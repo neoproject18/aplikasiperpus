@@ -33,7 +33,7 @@
   </li>
   <?php if($userlogin[0]->id_role == 1): ?>
     <li class="nav-item">
-      <a class="nav-link" href="">
+      <a class="nav-link" href="<?= base_url('user') ?>">
         <i class="fas fa-fw fa-user"></i>
         <span>Data User</span>
       </a>
