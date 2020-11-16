@@ -2,6 +2,7 @@
 
 class M_user extends CI_Model
 {
+	private $_tbl_user = "tbl_user";
 	public function login($username, $password)
 	{
 		$query = $this->db->query("SELECT * FROM tbl_user WHERE username = '$username' AND password = '$password' AND isdeleted = 0");

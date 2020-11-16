@@ -2,33 +2,34 @@
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalCenterTitle">Tambah User</h5>
+        <h5 class="modal-title" id="exampleModalCenterTitle">Tambah Member</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
         <div class="form-group row">
-          <label class="col-sm-3 col-form-label">User</label>
+          <label class="col-sm-3 col-form-label">Member</label>
           <div class="col-sm-9">
-            <input type="text" class="form-control" placeholder="Nama User" id="nama_user">
+            <input type="text" class="form-control" placeholder="Nama Member" id="nama_member">
           </div>
         </div>
         <div class="form-group row">
-          <label class="col-sm-3 col-form-label">Username</label>
+          <label class="col-sm-3 col-form-label">Alamat</label>
           <div class="col-sm-9">
-            <input type="text" class="form-control" placeholder="Username" id="username">
+            <textarea type="text" class="form-control" placeholder="Alamat" id="alamat"></textarea>
           </div>
         </div>
         <div class="form-group row">
-          <label class="col-sm-3 col-form-label">Role</label>
+          <label class="col-sm-3 col-form-label">Email</label>
           <div class="col-sm-9">
-            <select type="text" class="form-control" placeholder="Role" id="id_role">
-              <option value="">Pilih Role</option>
-              <?php foreach($list_role as $value): ?>
-                <option value="<?= $value->id_role ?>"><?= $value->nama_role ?></option>
-              <?php endforeach; ?>
-            </select>
+            <input type="email" class="form-control" placeholder="Email" id="email">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-sm-3 col-form-label">No. Telp</label>
+          <div class="col-sm-9">
+            <input type="text" class="form-control" placeholder="No. Telp" id="no_telp">
           </div>
         </div>
       </div>
@@ -50,28 +51,29 @@
         </button>
       </div>
       <div class="modal-body">
-        <input type="hidden" id="id_user_ubah">
+        <input type="hidden" id="id_member_ubah">
         <div class="form-group row">
-          <label class="col-sm-3 col-form-label">User</label>
+          <label class="col-sm-3 col-form-label">Member</label>
           <div class="col-sm-9">
-            <input type="text" class="form-control" placeholder="Nama User" id="nama_user_ubah">
+            <input type="text" class="form-control" placeholder="Nama Member" id="nama_member_ubah">
           </div>
         </div>
         <div class="form-group row">
-          <label class="col-sm-3 col-form-label">Username</label>
+          <label class="col-sm-3 col-form-label">Alamat</label>
           <div class="col-sm-9">
-            <input type="text" class="form-control" placeholder="Username" id="username_ubah">
+            <textarea type="text" class="form-control" placeholder="Alamat" id="alamat_ubah"></textarea>
           </div>
         </div>
         <div class="form-group row">
-          <label class="col-sm-3 col-form-label">Role</label>
+          <label class="col-sm-3 col-form-label">Email</label>
           <div class="col-sm-9">
-            <select type="text" class="form-control" placeholder="Role" id="id_role_ubah">
-              <option value="">Pilih Role</option>
-              <?php foreach($list_role as $value): ?>
-                <option value="<?= $value->id_role ?>"><?= $value->nama_role ?></option>
-              <?php endforeach; ?>
-            </select>
+            <input type="email" class="form-control" placeholder="Email" id="email_ubah">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-sm-3 col-form-label">No. Telp</label>
+          <div class="col-sm-9">
+            <input type="text" class="form-control" placeholder="No. Telp" id="no_telp_ubah">
           </div>
         </div>
       </div>
@@ -86,19 +88,21 @@
 
 <script type="text/javascript">
   function submit_add(){
-    var nama = $('#nama_user').val();
-    var user_name = $('#username').val();
-    var idrole = $('#id_role').val();
+    var nama = $('#nama_member').val();
+    var alamat = $('#alamat').val();
+    var email = $('#email').val();
+    var notelp = $('#no_telp').val();
 
-    if(nama.length > 0 && user_name.length > 0 && idrole.length > 0)
+    if(nama.length > 0 && alamat.length > 0 && email.length > 0 && notelp.length > 0)
     {
       $.ajax({
-        url : "<?= base_url('user/save') ?>",
+        url : "<?= base_url('member/save') ?>",
         type : "POST",
         data:{
-          nama_user: nama,
-          username: user_name,
-          id_role: idrole,
+          nama_member: nama,
+          alamat: alamat,
+          email: email,
+          no_telp: notelp,
         },
         success:function(result)
         {
@@ -114,21 +118,23 @@
   }
 
   function submit_update(){
-    var iduser = $('#id_user_ubah').val();
-    var nama = $('#nama_user_ubah').val();
-    var user_name = $('#username_ubah').val();
-    var idrole = $('#id_role_ubah').val();
+    var idmember = $('#id_member_ubah').val();
+    var nama = $('#nama_member_ubah').val();
+    var alamat = $('#alamat_ubah').val();
+    var email = $('#email_ubah').val();
+    var notelp = $('#no_telp_ubah').val();
 
-    if(nama.length > 0 && user_name.length > 0 && idrole.length > 0)
+    if(nama.length > 0 && alamat.length > 0 && email.length > 0 && notelp.length > 0)
     {
       $.ajax({
-        url : "<?= base_url('user/update') ?>",
+        url : "<?= base_url('member/update') ?>",
         type : "POST",
         data:{
-          id_user: iduser,
-          nama_user: nama,
-          username: user_name,
-          id_role: idrole,
+          id_member: idmember,
+          nama_member: nama,
+          alamat: alamat,
+          email: email,
+          no_telp: notelp,
         },
         success:function(result)
         {

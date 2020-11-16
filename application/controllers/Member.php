@@ -21,8 +21,6 @@ class Member extends MY_Controller
 
 	public function save()
 	{
-		$id_member = $this->generate_idmember();
-		$in_data['id_member'] = $id_member;
 		$in_data['nama_member'] = $this->db->escape_str($this->input->post('nama_member'));
 		$in_data['alamat'] = $this->db->escape_str($this->input->post('alamat'));
 		$in_data['email'] = $this->db->escape_str($this->input->post('email'));
@@ -43,15 +41,6 @@ class Member extends MY_Controller
 			$output['message'] = "Gagal menambahkan member.";
 		}
 		echo json_encode($output);
-	}
-
-	private function generate_idmember()
-	{
-		$kode = "10000"; $no = "";
-		$nomor = $this->m_member->getIdMember();
-		if($nomor) $no = $nomor[0]->nomor + 1;
-		else $no = $kode + 1;
-		return 'M-' . date('y') . $no;
 	}
 
 	public function update()
