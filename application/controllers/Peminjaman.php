@@ -18,4 +18,10 @@ class Peminjaman extends MY_Controller
 		$data['listdata'] = $this->m_peminjaman->list_peminjaman();
 		$this->template->load('template/v_layout','peminjaman/v_index', $data);
 	}
+
+	public function tambah()
+	{
+		$data['userlogin'] = $this->userlogin;
+		$this->template->load('template/v_layout','peminjaman/v_tambah', $data);
+	}
 }

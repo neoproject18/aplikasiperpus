@@ -13,7 +13,7 @@
       <div class="card mb-4">
         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
           <h6 class="m-0 font-weight-bold text-primary">List Peminjaman</h6>
-          <a href="" class="m-0 float-right btn btn-primary btn-sm">
+          <a href="<?= base_url('peminjaman/tambah') ?>" class="m-0 float-right btn btn-primary btn-sm">
             <i class="fa fa-plus-circle"></i> Tambah
           </a>
         </div>
