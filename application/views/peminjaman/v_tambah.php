@@ -23,7 +23,7 @@
               <input type="text" class="form-control" id="nama_member" disabled="">
             </div>
             <div class="col-sm-2">
-              <button class="btn btn-primary"><i class="fa fa-search"></i> Pilih</button>
+              <button class="btn btn-primary" data-toggle="modal" data-target="#modal-member"><i class="fa fa-search"></i> Pilih</button>
             </div>
           </div>
           <div class="form-group row">
@@ -33,7 +33,7 @@
               <input type="text" class="form-control" id="judul_buku" disabled="">
             </div>
             <div class="col-sm-2">
-              <button class="btn btn-primary"><i class="fa fa-search"></i> Pilih</button>
+              <button class="btn btn-primary" data-toggle="modal" data-target="#modal-buku"><i class="fa fa-search"></i> Pilih</button>
             </div>
           </div>
           <div class="form-group row">
@@ -51,8 +51,8 @@
           <div class="form-group row">
             <div class="col-sm-3"></div>
             <div class="col-sm-9">
-              <button class="btn btn-primary btn-sm"><i class="fa fa-check"></i> Simpan</button>
-              <button class="btn btn-danger btn-sm"><i class="fa fa-times"></i> Batal</button>
+              <button onclick="submit_pinjam()" class="btn btn-primary btn-sm"><i class="fa fa-check"></i> Simpan</button>
+              <button onclick="window.history.back()" class="btn btn-danger btn-sm"><i class="fa fa-times"></i> Batal</button>
             </div>
           </div>
         </div>
@@ -60,3 +60,47 @@
     </div>
   </div>
 </div>
+<?php $this->load->view('peminjaman/v_modal_tambah'); ?>
+
+<script type="text/javascript">
+  function submit_pinjam()
+  {
+    var idmember = $('#id_member').val();
+    var idbuku = $('#id_buku').val();
+
+    swal({
+      title: "Konfirmasi",
+      text: "Ingin menambahkan peminjaman buku?",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    }).then((submit) => {
+      if(submit)
+      {
+        if(idmember.length > 0 && idbuku.length > 0) 
+        {
+          $.ajax({
+            url : "<?= base_url('peminjaman/simpan_peminjaman') ?>",
+            type : "POST",
+            data:{
+              id_member: idmember,
+              id_buku: idbuku,
+            },
+            success:function(result)
+            {
+              var hasil = JSON.parse(result);
+              swal_show(hasil);
+
+              if(hasil['status_code'] == 200)
+                setTimeout("window.history.back()", 1500);
+            },
+          });
+        }
+        else swal_alert("Peringatan", "Silahkan lengkapi data!", "warning");
+      }
+      else info.revert();
+    });
+
+    
+  }
+</script>

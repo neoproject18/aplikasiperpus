@@ -2,6 +2,8 @@
 
 class M_peminjaman extends CI_Model
 {
+	private $_tbl_peminjaman = 'tbl_peminjaman';
+
 	public function list_peminjaman()
 	{
 		return $this->db->query("SELECT p.id_peminjaman, m.*, u.id_user, u.nama_user, b.*,
@@ -11,5 +13,12 @@ class M_peminjaman extends CI_Model
 			JOIN tbl_user u ON u.id_user = p.id_user
 			JOIN tbl_buku b ON b.id_buku = p.id_buku
 			WHERE p.status_pinjam = 'Pinjam'")->result();
+	}
+
+	public function insert($data)
+	{
+		if($this->db->insert($this->_tbl_peminjaman, $data))
+			return true;
+		return false;
 	}
 }
