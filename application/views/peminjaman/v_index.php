@@ -18,6 +18,29 @@
           </a>
         </div>
         <div class="table-responsive p-3">
+          <span style="color: red; font-style: italic; font-size: 12px">Filter berdasarkan status dan range tanggal.</span>
+          <div class="form-group row">
+            <label class="col-sm-1 col-form-label">Filter</label>
+            <div class="col-sm-2">
+              <select class="form-control form-control-sm" id="status" title="Status">
+                <option value="semua">Semua</option>
+                <option value="pinjam">Pinjam</option>
+                <option value="kembali">Kembali</option>
+              </select>
+            </div>
+            <div class="col-sm-2">
+              <input type="date" class="form-control form-control-sm" id="tgl_awal" value="<?= date('Y-m-01') ?>" title="Tanggal Awal">
+            </div>
+            <div class="col-sm-2">
+              <input type="date" class="form-control form-control-sm" id="tgl_akhir" value="<?= date('Y-m-t') ?>" title="Tanggal Akhir">
+            </div>
+            <?php if($this->uri->segment(2) == "filter"): ?>
+              <div class="btn-group mb-1">
+                <a href="<?= base_url('peminjaman') ?>"><i class="fa fa-history"></i></a>
+              </div>
+            <?php endif; ?>
+          </div>
+
           <table class="table align-items-center table-flush" id="dataTable">
             <thead class="thead-light">
               <tr>
@@ -41,7 +64,11 @@
                 <td><?= $value->tgl_pinjam ?></td>
                 <td><?= $value->tgl_kembali ?></td>
                 <td><?= $value->status_pinjam ?></td>
-                <td></td>
+                <td>
+                  <div class="btn-group">
+                    <a href="<?= base_url('peminjaman/ubah/' . $value->id_peminjaman) ?>" class="btn btn-success btn-sm" title="Edit"><span class="fa fa-edit"></span></a>
+                  </div>
+                </td>
               </tr>
             <?php endforeach; ?>
           </tbody>
@@ -51,3 +78,36 @@
   </div>
 </div>
 </div>
+
+<script type="text/javascript">
+  function filterData()
+  {
+    var status = $('#status').val();
+    var tgl_awal = $('#tgl_awal').val();
+    var tgl_akhir = $('#tgl_akhir').val();
+
+    window.location.href = "<?= base_url('peminjaman/filter/') ?>" + status + "/" + tgl_awal + "/" + tgl_akhir;
+  }
+
+  $('#status').change(function(e) {
+    filterData();
+  });
+
+  $('#tgl_awal').change(function(e) {
+    filterData();
+  });
+
+  $('#tgl_akhir').change(function(e) {
+    filterData();
+  });
+
+  $(document).ready(function(){
+    var filter = "<?= $this->uri->segment(3) ?>";
+    if(filter != "")
+    {
+      $('#status').val("<?= $this->uri->segment(3) ?>");
+      $('#tgl_awal').val("<?= $this->uri->segment(4) ?>");
+      $('#tgl_akhir').val("<?= $this->uri->segment(5) ?>");
+    }
+  });
+</script>

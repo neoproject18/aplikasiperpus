@@ -19,6 +19,13 @@ class Peminjaman extends MY_Controller
 		$this->template->load('template/v_layout','peminjaman/v_index', $data);
 	}
 
+	public function filter($status, $tgl_awal, $tgl_akhir)
+	{
+		$data['userlogin'] = $this->userlogin;
+		$data['listdata'] = $this->m_peminjaman->filter_list_peminjaman($status, $tgl_awal, $tgl_akhir);
+		$this->template->load('template/v_layout','peminjaman/v_index', $data);
+	}
+
 	public function tambah()
 	{
 		$data['userlogin'] = $this->userlogin;
@@ -49,6 +56,45 @@ class Peminjaman extends MY_Controller
 			$output['title'] = "Gagal";
 			$output['type'] = "error";
 			$output['message'] = "Gagal menambahkan peminjaman buku.";
+		}
+		echo json_encode($output);
+	}
+
+	public function ubah($idpinjam)
+	{
+		$data['userlogin'] = $this->userlogin;
+		$data['data_pinjam'] = $this->m_peminjaman->list_peminjaman_byid($idpinjam);
+		$data['list_buku'] = $this->m_buku->listbukutersedia();
+		$this->template->load('template/v_layout','peminjaman/v_ubah', $data);
+	}
+
+	public function ubah_peminjaman($idpinjam)
+	{
+		$idbuku = $this->input->post('id_buku');
+		$status = $this->input->post('status');
+
+		$id_data['id_peminjaman'] = $idpinjam;
+		$in_data['id_buku'] = $idbuku;
+		$in_data['status_pinjam'] = $status;
+
+		if($status == "Kembali")
+		{
+			$in_data['tgl_kembali'] = date("Y-m-d H:i:s");
+		}
+
+		if($this->m_peminjaman->update($in_data, $id_data))
+		{
+			$output['status_code'] = 200;
+			$output['title'] = "Berhasil";
+			$output['type'] = "success";
+			$output['message'] = "Berhasil mengubah peminjaman buku.";
+		}
+		else
+		{
+			$output['status_code'] = 400;
+			$output['title'] = "Gagal";
+			$output['type'] = "error";
+			$output['message'] = "Gagal mengubah peminjaman buku.";
 		}
 		echo json_encode($output);
 	}
