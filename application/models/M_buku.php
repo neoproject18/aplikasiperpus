@@ -51,6 +51,13 @@ class M_buku extends CI_Model
 			(SELECT b.jumlah - COUNT(*) FROM tbl_peminjaman p WHERE p.status_pinjam = 'Pinjam'
 			AND p.id_buku = b.id_buku) > 0")->result();
 	}
+
+	public function import_data($data)
+	{
+		if($this->db->insert_batch($this->_tbl_buku, $data))
+			return true;
+		return false;
+	}
 }
 
 
