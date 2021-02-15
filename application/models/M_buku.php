@@ -11,6 +11,13 @@ class M_buku extends CI_Model
 			WHERE b.isdeleted = 0")->result();
 	}
 
+	public function exportlistbuku()
+	{
+		return $this->db->query("SELECT b.*, k.nama_kategori FROM tbl_buku b
+			JOIN tbl_kategori k ON k.id_kategori = b.id_kategori
+			WHERE b.isdeleted = 0")->result_array();
+	}
+
 	public function listbuku_byid($idbuku)
 	{
 		return $this->db->get_where($this->_tbl_buku, ['id_buku' => $idbuku])->row();

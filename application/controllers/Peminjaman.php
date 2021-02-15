@@ -8,6 +8,8 @@ class Peminjaman extends MY_Controller
 	{
 		parent::__construct();
 		$this->load->model(array('m_peminjaman', 'm_member', 'm_buku'));
+		// $this->load->helper(array('date_format'));
+		// $this->load->library(array('date_format'));
 		$this->cekLogin();
 		$this->userlogin = $this->getUserData();
 	}

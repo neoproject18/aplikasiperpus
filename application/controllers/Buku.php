@@ -172,6 +172,17 @@ class Buku extends MY_Controller
 
 		}
 	}
+
+	public function exportlistbuku()
+	{
+		$listdata = $this->m_buku->exportlistbuku();
+		$data = array(
+			'title' => 'List Buku - ' . time(),
+			'listdata' => $listdata
+		);
+
+		$this->load->view('buku/v_list_buku_xls', $data);
+	}
 }
 
 
