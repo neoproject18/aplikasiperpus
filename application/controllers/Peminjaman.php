@@ -10,6 +10,7 @@ class Peminjaman extends MY_Controller
 		$this->load->model(array('m_peminjaman', 'm_member', 'm_buku'));
 		// $this->load->helper(array('date_format'));
 		// $this->load->library(array('date_format'));
+		$this->load->library(array('PHPExcel','excel'));
 		$this->cekLogin();
 		$this->userlogin = $this->getUserData();
 	}
@@ -99,5 +100,65 @@ class Peminjaman extends MY_Controller
 			$output['message'] = "Gagal mengubah peminjaman buku.";
 		}
 		echo json_encode($output);
+	}
+
+	public function exportlistpeminjaman($status, $tgl_awal, $tgl_akhir)
+	{
+		$listdata = $this->m_peminjaman->filter_list_peminjaman($status, $tgl_awal, $tgl_akhir);
+
+		// create file excel
+		$filename = "export_peminjaman.xls";
+		@unlink("./" . $filename);
+		$objPHPExcel = new PHPExcel();
+		$startRow = 1;
+
+		// SHEET 1
+		$objPHPExcel->setActiveSheetIndex(0);
+		$this->createExcel($objPHPExcel, $startRow, $listdata);
+
+		$objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel);
+		$objWriter->save($filename);
+		redirect(base_url().$filename);
+	}
+
+
+	private function createExcel($objPHPExcel, $startRow, $listdata)
+	{
+		// Set Judul Tabel
+		$objPHPExcel->getActiveSheet()->SetCellValue('A' . $startRow, 'NO');
+		$objPHPExcel->getActiveSheet()->SetCellValue('B' . $startRow, 'ID PINJAM');
+		$objPHPExcel->getActiveSheet()->SetCellValue('C' . $startRow, 'NAMA MEMBER');
+		$objPHPExcel->getActiveSheet()->SetCellValue('D' . $startRow, 'KODE MEMBER');
+		$objPHPExcel->getActiveSheet()->SetCellValue('E' . $startRow, 'JDUUL BUKU');
+		$objPHPExcel->getActiveSheet()->SetCellValue('F' . $startRow, 'TGL PINJAM');
+		$objPHPExcel->getActiveSheet()->SetCellValue('G' . $startRow, 'TGL KEMBALI');
+		$objPHPExcel->getActiveSheet()->SetCellValue('H' . $startRow, 'STATUS');
+
+		$rowCount = $startRow+1;
+		foreach ($listdata as $value) {			
+			$objPHPExcel->getActiveSheet()->SetCellValue('A' . $rowCount, $rowCount-1);
+			$objPHPExcel->getActiveSheet()->SetCellValue('B' . $rowCount, $value->id_peminjaman);
+			$objPHPExcel->getActiveSheet()->SetCellValue('C' . $rowCount, $value->nama_member);
+			$objPHPExcel->getActiveSheet()->SetCellValue('D' . $rowCount, $value->id_member);
+			$objPHPExcel->getActiveSheet()->SetCellValue('E' . $rowCount, $value->judul_buku);
+			$objPHPExcel->getActiveSheet()->SetCellValue('F' . $rowCount, $value->tgl_pinjam);
+			$objPHPExcel->getActiveSheet()->SetCellValue('G' . $rowCount, $value->tgl_kembali);
+			$objPHPExcel->getActiveSheet()->SetCellValue('H' . $rowCount, $value->status_pinjam);
+			$this->setBorder($objPHPExcel, 'A' . $startRow . ':H' . $rowCount);
+			$rowCount++;
+		}
+	}
+
+	private function setBorder($objPHPExcel, $area)
+	{
+		$objPHPExcel->getActiveSheet()->getStyle($area)->applyFromArray(
+			array(
+				'borders'=> array(
+					'allborders' => array(
+						'style' => PHPExcel_Style_Border::BORDER_THIN
+					)
+				)
+			)
+		);
 	}
 }
